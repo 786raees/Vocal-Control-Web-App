@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <title>E-commerce Website</title>
+
+  <style>
+    nav{
+      background-color: green;
+    }
+    .one-edge-shadow {
+              box-shadow: 0 8px 2px -5px rgb(246, 245, 245);
+}
+.display-8{
+  font-weight: 200;
+  font-size: 30px;
+  font-colour: $teal-200;
+}
+.bottom{
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  cursor: pointer;
+  color: white;
+  background-color: rgb(8 145 178);
+  Z-index: 999;
+  width: 4rem;
+  height: 4rem;
+  font-size: 2.25rem; /* 36px */
+  line-height: 2.5rem; /* 40px */
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  border-radius:100%;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+  </style>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</head>
+
+<body>
+  <!-- navbar -->
+
+<nav class="one-edge-shadow
+  navbar navbar-light
+  sticky-top navbar 
+  navbar-expand-lg
+  text-white">
+    <a class="navbar-brand ms-3 text-dark " href="/">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+    <img src="https://www.freepnglogos.com/uploads/shopping-cart-png/shopping-cart-svg-png-icon-download-28.png" style="width:50px;height:50px,color:text-light;">E-Commerce</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/store">Store <span class="sr-only">(current)</span></a>
+        </li>
+
+          </ul>
+
+
+
+
+      <ul class=" navbar-nav my-2 my-lg-0">
+
+        <li class="nav-item active">
+          <a class="nav-link" href="/cart">Cart 
+            <span class="badge badge-success">{{request.session.cart.keys|length}}</span>
+            <span class="sr-only">(current)</span></a>
+        </li>
+
+        {% if request.session.customer %}
+        
+        <li class="nav-item active ">
+          <a class="nav-link" href="/orders">Orders<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active ">
+          <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
+        </li>
+        {% else %}
+       
+        <li class="nav-item active">
+          <a class="nav-link" href="/signup">Signup<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/login">Login<span class="sr-only">(current)</span></a>
+        </li>
+        {% endif %}
+
+
+      </ul>
+
+
+    </div>
+  </nav>
+  <!---->
+  
+  <div class="bottom" id="stog">
+    <ion-icon name="mic-outline"></ion-icon>
+  </div>
+
+  {% block content %}{% endblock %}
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+    <script>
+      try {
+        var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        var recognition = new SpeechRecognition();
+      }
+      catch(e) {
+        console.error(e);
+        $('.no-browser-support').show();
+        $('.app').hide();
+      }
+      
+      
+      var noteTextarea = $('#note-textarea');
+      var instructions = $('#recording-instructions');
+      var notesList = $('ul#notes');
+      
+      var noteContent = '';
+      
+      // Get all notes from previous sessions and display them.
+      // var notes = getAllNotes();
+      // renderNotes(notes);
+      
+      
+      
+      /*-----------------------------
+            Voice Recognition 
+      ------------------------------*/
+      
+      // If false, the recording will stop after a few seconds of silence.
+      // When true, the silence period is longer (about 15 seconds),
+      // allowing us to keep recording even when the user pauses. 
+      recognition.continuous = true;
+      
+      // This block is called every time the Speech APi captures a line. 
+      recognition.onresult = function(event) {
+      
+        // event is a SpeechRecognitionEvent object.
+        // It holds all the lines we have captured so far. 
+        // We only need the current one.
+        var current = event.resultIndex;
+      
+        // Get a transcript of what was said.
+        var transcript = event.results[current][0].transcript;
+      
+        // Add the current transcript to the contents of our Note.
+        // There is a weird bug on mobile, where everything is repeated twice.
+        // There is no official solution so far so we have to handle an edge case.
+        var mobileRepeatBug = (current == 1 && transcript == event.results[0][0].transcript);
+      
+        if(!mobileRepeatBug) {
+          noteContent += transcript;
+          noteContent = noteContent.toLowerCase()
+          console.log(noteContent)
+
+          if(noteContent.includes("car") && noteContent.includes("show")){
+            window.location = "/cart"
+          }else if(noteContent.includes("home") && noteContent.includes("go")){
+            window.location = "/"
+          }else if(noteContent.includes("log out")  && noteContent.includes("go")){
+            window.location = "/logout"
+          }else if(noteContent.includes("sign up") && noteContent.includes("go")){
+            window.location = "/signup"
+          }else if(noteContent.includes("login") && noteContent.includes("go")){
+            window.location = "/login"
+          }else if(noteContent.includes("submit")){
+            $("body > div.container > div > div > form > button").click();
+          }else if(noteContent.includes("add") && noteContent.includes("to shopping car")){
+            var prod_name = noteContent.replace('add', '').replace("to shopping ",'').replace("cart",'').replace("card",'')
+            try{
+              document.querySelector(`input[product_name*='${prod_name.trim()}'][product_name*='+']`).click();
+            }catch(e){
+              
+              noteContent = "";
+            }
+          }else if(noteContent.includes("remove") && noteContent.includes("from shopping car")){
+            try{
+              var prod_name = noteContent.replace('remove', '').replace("from shopping",'').replace("cart",'').replace("card",'')
+              console.log(prod_name)
+              document.querySelector(`input[product_name*="${prod_name.trim()}"][product_name*="-"]`).click();
+            }catch(e){
+              
+              noteContent = "";
+            }
+          }
+
+          noteContent = "";
+          //noteTextarea.val(noteContent);
+        }
+      };
+
+      
+      $('#stog').on('click', function(e) {
+        if (noteContent.length) {
+          noteContent += ' ';
+        }
+        recognition.start();
+        $('#stog').css("background-color", "red");
+      });
+      recognition.start();
+
+
+    </script>
+</body>
+
+</html>
