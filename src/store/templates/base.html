@@ -18,42 +18,72 @@
     }
     .one-edge-shadow {
               box-shadow: 0 8px 2px -5px rgb(246, 245, 245);
-}
-.display-8{
-  font-weight: 200;
-  font-size: 30px;
-  font-colour: $teal-200;
-}
-.bottom{
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
-  cursor: pointer;
-  color: white;
-  background-color: rgb(8 145 178);
-  Z-index: 999;
-  width: 4rem;
-  height: 4rem;
-  font-size: 2.25rem; /* 36px */
-  line-height: 2.5rem; /* 40px */
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  border-radius:100%;
-  animation: bounce 1s infinite;
-}
+    }
+  
+  .display-8{
+    font-weight: 200;
+    font-size: 30px;
+    color: teal-200;
+  }
+  .text-div{
+    height: 100px;
+    width: 90%;
+    background-color: rgba(0, 0, 0, 0.492);
+    z-index: 999;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    border-radius: 10px;
+    backdrop-filter: blur(6px);
+  }
 
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(-25%);
-    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  #text-div{
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    transition: bottom 1s ease;
   }
-  50% {
-    transform: translateY(0);
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  .d-none {
+    bottom: -100px;
   }
-}
+  .bottom{
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    cursor: pointer;
+    color: white;
+    Z-index: 999;
+    width: 4rem;
+    height: 4rem;
+    font-size: 2.25rem; /* 36px */
+    line-height: 2.5rem; /* 40px */
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius:100%;
+    animation: bounce 1s infinite;
+  }
+  .not-listen {
+    background-color: rgb(8 145 178);
+  }
+  .listen {
+    background-color: red;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(-25%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateY(0);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
 
   </style>
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
@@ -72,7 +102,7 @@
     <a class="navbar-brand ms-3 text-dark " href="/">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
-    <img src="https://www.freepnglogos.com/uploads/shopping-cart-png/shopping-cart-svg-png-icon-download-28.png" style="width:50px;height:50px,color:text-light;">E-Commerce</a>
+    <img src="https://www.freepnglogos.com/uploads/shopping-cart-png/shopping-cart-svg-png-icon-download-28.png" style="width:50px;height:50px; color:text-light;">E-Commerce</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -124,9 +154,10 @@
   </nav>
   <!---->
   
-  <div class="bottom" id="stog">
+  <div class="bottom not-listen" id="stog">
     <ion-icon name="mic-outline"></ion-icon>
   </div>
+  <div class="text-div" id="text-div"></div>
 
   {% block content %}{% endblock %}
 
@@ -194,7 +225,7 @@
           noteContent += transcript;
           noteContent = noteContent.toLowerCase()
           console.log(noteContent)
-
+          $('#text-div').text(noteContent);
           if(noteContent.includes("car") && noteContent.includes("show")){
             window.location = "/cart"
           }else if(noteContent.includes("home") && noteContent.includes("go")){
@@ -227,18 +258,44 @@
           }
 
           noteContent = "";
+
           //noteTextarea.val(noteContent);
         }
       };
 
-      
+      var listening = true;
       $('#stog').on('click', function(e) {
         if (noteContent.length) {
           noteContent += ' ';
         }
-        recognition.start();
-        $('#stog').css("background-color", "red");
+        if (!listening) {
+          try{
+            recognition.start();
+            $('#text-div').removeClass("d-none");
+          }catch(e){
+          }
+          listening = true;
+        }else{
+          recognition.stop();
+          listening = false;
+          $('#text-div').addClass("d-none");
+          $('#stog').addClass("not-listen");
+          $('#stog').removeClass("listen");
+        }
       });
+
+      recognition.onstart = () => {
+        $('#stog').removeClass("not-listen");
+        $('#stog').addClass("listen");
+        
+      };
+      
+      recognition.onspeechend  = () => {
+        listening = false;
+        $('#text-div').addClass("d-none");
+        $('#stog').addClass("not-listen");
+        $('#stog').removeClass("listen");
+      };
       recognition.start();
 
 
