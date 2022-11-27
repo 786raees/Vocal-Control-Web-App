@@ -27,7 +27,7 @@
   }
   .text-div{
     height: 100px;
-    width: 90%;
+    width: 70%;
     background-color: rgba(0, 0, 0, 0.492);
     z-index: 999;
     color: white;
@@ -42,14 +42,35 @@
 
   #text-div{
     position: fixed;
-    left: 10px;
+    left: 200px;
     bottom: 10px;
     transition: bottom 1s ease;
   }
   .d-none {
     bottom: -100px;
   }
-  .bottom{
+  #button-chat{
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    background-color: red;
+    cursor: pointer;
+    color: white;
+    Z-index: 999;
+    width: 4rem;
+    height: 4rem;
+    font-size: 2.25rem; /* 36px */
+    line-height: 2.5rem; /* 40px */
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border: 0;
+    outline: 0;
+    border-radius:100%;
+    animation: bounce 1s infinite;
+  }
+  #stog{
     position: fixed;
     bottom: 15px;
     right: 15px;
@@ -64,14 +85,38 @@
     justify-content: center;
     align-items: center;
     display: flex;
+    border: 0;
+    outline: 0;
     border-radius:100%;
     animation: bounce 1s infinite;
   }
+
   .not-listen {
     background-color: rgb(8 145 178);
   }
   .listen {
     background-color: red;
+  }
+
+  .chat-text-div{
+    height: 20vh;
+    width: auto;
+    min-width: 20vw;
+    position: fixed;
+    left: 40px;
+    bottom: 120px;
+    z-index: 999;
+    border-bottom-left-radius: 20%;
+    border-top-right-radius: 20%;
+
+
+    background-color: rgba(0, 0, 0, 0.492);
+    z-index: 999;
+    color: white;
+    padding: 15px;
+    display: flex;
+    font-size: 27px;
+    backdrop-filter: blur(6px);
   }
 
   @keyframes bounce {
@@ -154,9 +199,13 @@
   </nav>
   <!---->
   
-  <div class="bottom not-listen" id="stog">
+  <button type="button" class="bottom not-listen" id="stog">
     <ion-icon name="mic-outline"></ion-icon>
-  </div>
+  </button>
+  <button type="button" class="button-chat" id="button-chat">
+    <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+  </button>
+  <div class="chat-text-div" id="chat-text-div" contenteditable="true"></div>
   <div class="text-div" id="text-div"></div>
 
   {% block content %}{% endblock %}
@@ -204,27 +253,9 @@
       // When true, the silence period is longer (about 15 seconds),
       // allowing us to keep recording even when the user pauses. 
       recognition.continuous = true;
-      
-      // This block is called every time the Speech APi captures a line. 
-      recognition.onresult = function(event) {
-      
-        // event is a SpeechRecognitionEvent object.
-        // It holds all the lines we have captured so far. 
-        // We only need the current one.
-        var current = event.resultIndex;
-      
-        // Get a transcript of what was said.
-        var transcript = event.results[current][0].transcript;
-      
-        // Add the current transcript to the contents of our Note.
-        // There is a weird bug on mobile, where everything is repeated twice.
-        // There is no official solution so far so we have to handle an edge case.
-        var mobileRepeatBug = (current == 1 && transcript == event.results[0][0].transcript);
-      
-        if(!mobileRepeatBug) {
-          noteContent += transcript;
+      function act(transcript){
+        noteContent += transcript;
           noteContent = noteContent.toLowerCase()
-          console.log(noteContent)
           $('#text-div').text(noteContent);
           if(noteContent.includes("car") && noteContent.includes("show")){
             window.location = "/cart"
@@ -260,6 +291,57 @@
           noteContent = "";
 
           //noteTextarea.val(noteContent);
+      }
+
+      $('#chat-text-div').keypress(e=>{
+        if(e.key == "Enter"){
+          let text = $('#chat-text-div').text()
+          act(text);
+          $('#chat-text-div').text('');
+        }
+      });
+
+      var checking = true;
+      $('#button-chat').on('click', function(e) {
+        if (noteContent.length) {
+          noteContent += ' ';
+        }
+        if (!checking) {
+          try{
+            // recognition.start();
+            $('#chat-text-div').removeClass("d-none");
+          }catch(e){
+          }
+          checking = true;
+          $('#button-chat').css('background-color', 'red');
+        }else{
+          // recognition.stop();
+          checking = false;
+          $('#chat-text-div').addClass("d-none");
+          $('#button-chat').css('background-color', 'indigo');
+        }
+      });
+
+
+
+      // This block is called every time the Speech APi captures a line. 
+      recognition.onresult = function(event) {
+      
+        // event is a SpeechRecognitionEvent object.
+        // It holds all the lines we have captured so far. 
+        // We only need the current one.
+        var current = event.resultIndex;
+      
+        // Get a transcript of what was said.
+        var transcript = event.results[current][0].transcript;
+      
+        // Add the current transcript to the contents of our Note.
+        // There is a weird bug on mobile, where everything is repeated twice.
+        // There is no official solution so far so we have to handle an edge case.
+        var mobileRepeatBug = (current == 1 && transcript == event.results[0][0].transcript);
+      
+        if(!mobileRepeatBug) {
+          act(transcript)
         }
       };
 
