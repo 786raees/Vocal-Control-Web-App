@@ -44,7 +44,8 @@
 								<input hidden type="text" name='remove' value='True'>
 								<input type="submit" value=" - " product_name="-{{product.name|replace}}" class="btn btn-block btn-success border-right">
 							</form>
-							<div class="text-center col btn btn-success">{{product|cart_quantity:request.session.cart}} in Cart</div>
+							<a role="button" href="{% url 'product_page' product.id %}" class="text-center col btn btn-success"
+								value="Add To Cart">{{product|cart_quantity:request.session.cart}} in Cart</a>
 							<form action="/#{{product.id}}" class="col-2 " method="post">
 								{% csrf_token %}
 								<input hidden type="text" name='product' value='{{product.id}}'>
@@ -52,12 +53,14 @@
 							</form>
 						</div>
 						{% else %}
-						<form action="/#{{product.id}}" method="POST" class="btn-block">
+						{% comment %} <form action="/#{{product.id}}" method="POST" class="btn-block">
 							{% csrf_token %}
 							<input hidden type="text" name='product' value='{{product.id}}'>
 							<input type="submit" product_name="+{{product.name|replace}}" class="float-right btn btn-success form-control"
 								value="Add To Cart">
-						</form>
+							</form> {% endcomment %}
+							<a role="button" href="{% url 'product_page' product.id %}" product_name="+{{product.name|replace}}" class="float-right btn btn-success form-control"
+								value="Add To Cart">Add To Cart</a>
 						{% endif %}
 
 					</div>

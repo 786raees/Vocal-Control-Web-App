@@ -19,6 +19,10 @@ class Order(models.Model):
     def placeOrder(self):
         self.save()
 
+    # def save(self, *args, **kwargs) -> None:
+    #     self.product.in_stock -= 1
+    #     return super().save(*args, **kwargs)
+
     @staticmethod
     def get_orders_by_customer(customer_id):
         return Order.objects.filter(customer=customer_id).order_by('-date')

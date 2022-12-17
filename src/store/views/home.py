@@ -9,6 +9,8 @@ class Index(View):
 
     def post(self , request):
         product = request.POST.get('product')
+        p = Products.objects.filter(id=product)
+
         remove = request.POST.get('remove')
         cart = request.session.get('cart')
         if cart:
@@ -18,21 +20,23 @@ class Index(View):
                     if quantity<=1:
                         cart.pop(product)
                     else:
+                        p.update(in_stock=p.first().in_stock+1)
                         cart[product]  = quantity-1
                 else:
+                    p.update(in_stock=p.first().in_stock-1)
                     cart[product]  = quantity+1
 
             else:
+                p.update(in_stock=p.first().in_stock-1)
                 cart[product] = 1
         else:
             cart = {}
+            p.update(in_stock=p.first().in_stock-1)
             cart[product] = 1
 
         request.session['cart'] = cart
         print('cart' , request.session['cart'])
-        return redirect('homepage')
-
-
+        return redirect('product_page', kwargs={'id': int(product)})
 
     def get(self , request):
         # print()
@@ -58,3 +62,6 @@ def store(request):
     return render(request, 'index.html', data)
 
 
+def product_page(request, id):
+    context = {'product': Products.objects.get(id=id)}
+    return render(request, 'product.html', context)
