@@ -312,7 +312,7 @@ function act(transcript){
       window.location = "/cart"
     }else if(noteContent.includes("home") && noteContent.includes("go")){
       //text speak
-        message.text = "OK {{request.user}} going to home page";
+        message.text = "OK going to home page";
         // speak!
         speechSynthesis.speak(message);
       window.location = "/"
@@ -328,7 +328,19 @@ function act(transcript){
         // speak!
         speechSynthesis.speak(message);
       window.location = "/signup"
-    }else if(noteContent.includes("login") && noteContent.includes("go")){
+    }else if(noteContent.includes("add it") || noteContent.includes("add this")){
+      //text speak
+        message.text = "ok Adding this item to shopping cart";
+        // speak!
+        speechSynthesis.speak(message);
+        document.querySelector("#add_btn").click();
+      }else if(noteContent.includes("remove it") || noteContent.includes("remove this")){
+        //text speak
+          message.text = "ok removing this item to shopping cart";
+          // speak!
+          speechSynthesis.speak(message);
+          document.querySelector("#remove_btn").click();
+        }else if(noteContent.includes("login") && noteContent.includes("go")){
       //text speak
         message.text = "going to login page";
         // speak!

@@ -30,9 +30,8 @@
                         <th scope="row">Available Colors</th>
                         <td>
                           <select class="dd-select-field" required>
-                            <option value="" disabled selected>Select Color *</option>
                             {% for color in product.color.all %}
-                            <option value="{{color}}" >{{color}}</option>
+                            <option {% if forloop.first %}selected{% endif %}value="{{color}}" >{{color}}</option>
                               {% endfor %}
                             </select>
                         </td>
@@ -43,9 +42,8 @@
                         <th scope="row">Available Sizes</th>
                         <td>
                           <select class="dd-select-field" required>
-                            <option value="" disabled selected>Select Sizes *</option>
                             <option value="S" >S</option>
-                            <option value="MD" >MD</option>
+                            <option selected value="MD" >MD</option>
                             <option value="L" >L</option>
                             <option value="XL" >XL</option>
                             </select>
@@ -62,20 +60,20 @@
                         {% csrf_token %}
                         <input hidden type="text" name='product' value='{{product.id}}'>
                         <input hidden type="text" name='remove' value='True'>
-                        <input type="submit" value=" - " product_name="-{{product.name|replace}}" class="btn btn-block btn-success border-right">
+                        <input type="submit" value=" - " id="remove_btn" product_name="-{{product.name|replace}}" class="btn btn-block btn-success border-right">
                     </form>
                     <div class="text-center col btn btn-success">{{product|cart_quantity:request.session.cart}} in Cart</div>
                     <form action="/#{{product.id}}" class="col-2 " method="post">
                         {% csrf_token %}
                         <input hidden type="text" name='product' value='{{product.id}}'>
-                        <input type="submit" value=" + " product_name="+{{product.name|replace}}" class="btn btn-block btn-success border-left">
+                        <input type="submit" value=" + " id="add_btn" product_name="+{{product.name|replace}}" class="btn btn-block btn-success border-left">
                     </form>
                 </div>
                 {% else %}
                      <form action="/#{{product.id}}" method="POST" class="btn-block">
                     {% csrf_token %}
                     <input hidden type="text" name='product' value='{{product.id}}'>
-                    <input type="submit" product_name="+{{product.name|replace}}" class="float-right btn btn-success form-control"
+                    <input type="submit" product_name="+{{product.name|replace}}" id="add_btn" class="float-right btn btn-success form-control"
                         value="Add To Cart">
                     </form>
                 {% endif %}

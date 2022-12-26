@@ -16,12 +16,12 @@ class Customer(models.Model):
     def get_customer_by_email(email):
         try:
             return Customer.objects.get(email= email)
-        except:
+        except Exception:
             return False
 
 
     def isExists(self):
-        if Customer.objects.filter(email = self.email):
-            return True
+        return bool(Customer.objects.filter(email = self.email))
 
-        return False
+    def __str__(self) -> str:
+        return f"{self.first_name} {self.last_name}"
