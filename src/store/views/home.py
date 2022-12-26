@@ -1,4 +1,5 @@
 from django.shortcuts import render , redirect , HttpResponseRedirect
+from django.urls import reverse
 from store.models.product import Products
 from store.models.category import Category
 from django.views import View
@@ -14,29 +15,27 @@ class Index(View):
         remove = request.POST.get('remove')
         cart = request.session.get('cart')
         if cart:
-            quantity = cart.get(product)
-            if quantity:
+            if quantity := cart.get(product):
                 if remove:
                     if quantity<=1:
                         cart.pop(product)
                     else:
-                        p.update(in_stock=p.first().in_stock+1)
                         cart[product]  = quantity-1
+                    p.update(in_stock=p.first().in_stock+1)
                 else:
-                    p.update(in_stock=p.first().in_stock-1)
                     cart[product]  = quantity+1
+                    p.update(in_stock=p.first().in_stock-1)
 
             else:
                 p.update(in_stock=p.first().in_stock-1)
                 cart[product] = 1
         else:
-            cart = {}
             p.update(in_stock=p.first().in_stock-1)
-            cart[product] = 1
-
+            cart = {product: 1}
         request.session['cart'] = cart
         print('cart' , request.session['cart'])
-        return redirect('product_page', kwargs={'id': int(product)})
+        url = reverse('product_page', kwargs={'id': int(product)})
+        return redirect(url)
 
     def get(self , request):
         # print()
@@ -48,16 +47,12 @@ def store(request):
         request.session['cart'] = {}
     products = None
     categories = Category.get_all_categories()
-    categoryID = request.GET.get('category')
-    if categoryID:
+    if categoryID := request.GET.get('category'):
         products = Products.get_all_products_by_categoryid(categoryID)
     else:
         products = Products.get_all_products();
 
-    data = {}
-    data['products'] = products
-    data['categories'] = categories
-
+    data = {'products': products, 'categories': categories}
     print('you are : ', request.session.get('email'))
     return render(request, 'index.html', data)
 

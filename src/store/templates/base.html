@@ -253,6 +253,8 @@
       // When true, the silence period is longer (about 15 seconds),
       // allowing us to keep recording even when the user pauses. 
       recognition.continuous = true;
+      /*
+
       function act(transcript){
         noteContent += transcript;
           noteContent = noteContent.toLowerCase()
@@ -293,7 +295,82 @@
           //noteTextarea.val(noteContent);
       }
 
-      $('#chat-text-div').keypress(e=>{
+*/
+function act(transcript){
+  let message = new SpeechSynthesisUtterance();
+        message.volume = 1;
+        message.rate = 1;
+        message.pitch = 1;
+  noteContent += transcript;
+    noteContent = noteContent.toLowerCase()
+    $('#text-div').text(noteContent);
+    if(noteContent.includes("car") && noteContent.includes("show")){
+        //text speak
+        message.text = "going to shopping cart";
+        // speak!
+        speechSynthesis.speak(message);
+      window.location = "/cart"
+    }else if(noteContent.includes("home") && noteContent.includes("go")){
+      //text speak
+        message.text = "OK {{request.user}} going to home page";
+        // speak!
+        speechSynthesis.speak(message);
+      window.location = "/"
+    }else if(noteContent.includes("log out") && noteContent.includes("go")){
+      //text speak
+        message.text = "Logging you out";
+        // speak!
+        speechSynthesis.speak(message);
+      window.location = "/logout"
+    }else if(noteContent.includes("sign up") && noteContent.includes("go")){
+      //text speak
+        message.text = "going to sign up page";
+        // speak!
+        speechSynthesis.speak(message);
+      window.location = "/signup"
+    }else if(noteContent.includes("login") && noteContent.includes("go")){
+      //text speak
+        message.text = "going to login page";
+        // speak!
+        speechSynthesis.speak(message);
+        window.location = "/login"
+      }else if(noteContent.includes("submit")){
+        $("body > div.container > div > div > form > button").click();
+        message.text = "OK Submitting the Log In Form";
+        // speak!
+        speechSynthesis.speak(message);
+    }else if(noteContent.includes("add") && noteContent.includes("to shopping car")){
+      var prod_name = noteContent.replace('add', '').replace("to shopping ",'').replace("cart",'').replace("card",'')
+      try{
+        //text speak
+        message.text = `add ${prod_name} to shopping car`;
+        document.querySelector(`*[product_name*='${prod_name.trim()}'][product_name*='+']`).click();
+        // speak!
+        speechSynthesis.speak(message);
+      }catch(e){
+        message.text = `No Item name ${prod_name}`;
+        
+        speechSynthesis.speak(message);
+        noteContent = "";
+      }
+    }else if(noteContent.includes("remove") && noteContent.includes("from shopping car")){
+      try{
+        var prod_name = noteContent.replace('remove', '').replace("from shopping",'').replace("cart",'').replace("card",'')
+        console.log(prod_name)
+        //text speak
+        message.text = "remove "+prod_name+" from shopping car";
+        // speak!
+        speechSynthesis.speak(message);
+        document.querySelector(`input[product_name*="${prod_name.trim()}"][product_name*="-"]`).click();
+      }catch(e){
+        noteContent = "";
+      }
+    }
+    noteContent = "";
+    //noteTextarea.val(noteContent);
+}
+
+$('#chat-text-div').keypress(e=>{
         if(e.key == "Enter"){
           let text = $('#chat-text-div').text()
           act(text);
@@ -413,10 +490,16 @@
         });
       }
       
-      
-      // Install input filters.
-      setInputFilter(document.getElementsByClassName("intTextBox")[0], value => /^-?\d*$/.test(value), "Must be an integer");
-      setInputFilter(document.getElementsByClassName("intTextBox")[1], value => /^-?\d*$/.test(value), "Must be an integer");
+      try{
+        // Install input filters.
+        setInputFilter(document.getElementsByClassName("intTextBox")[0], value => /^-?\d*$/.test(value), "Must be an integer");
+        setInputFilter(document.getElementsByClassName("intTextBox")[1], value => /^-?\d*$/.test(value), "Must be an integer");
+      }
+
+      catch (e){
+        
+      }
+        
     </script>
 </body>
 

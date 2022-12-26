@@ -25,23 +25,30 @@
                         <th scope="row">Price</th>
                         <td>${{product.price}}</td>
                       </tr>
-                      {% if product.show_sizes %}
-                      <tr>
-                        <th scope="row">Available Sies</th>
-                        <td>{{product.size}}</td>
-                      </tr>
-                      {% endif %}
                       {% if product.show_colors %}
                       <tr>
                         <th scope="row">Available Colors</th>
                         <td>
-
-                            
+                          <select class="dd-select-field" required>
+                            <option value="" disabled selected>Select Color *</option>
                             {% for color in product.color.all %}
-                            {{color}}{% if not forloop.last %}|{% endif %}
-                            {% endfor %}
-                                
-
+                            <option value="{{color}}" >{{color}}</option>
+                              {% endfor %}
+                            </select>
+                        </td>
+                      </tr>
+                      {% endif %}
+                      {% if product.show_sizes %}
+                      <tr>
+                        <th scope="row">Available Sizes</th>
+                        <td>
+                          <select class="dd-select-field" required>
+                            <option value="" disabled selected>Select Sizes *</option>
+                            <option value="S" >S</option>
+                            <option value="MD" >MD</option>
+                            <option value="L" >L</option>
+                            <option value="XL" >XL</option>
+                            </select>
                         </td>
                       </tr>
                       {% endif %}
