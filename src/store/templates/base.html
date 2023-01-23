@@ -222,6 +222,12 @@
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
     <script>
+      $(document).keyup(function(e){
+        if(e.keyCode == 32){
+            $("#button-chat").click();
+        }
+      });
+    
       try {
         var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         var recognition = new SpeechRecognition();
@@ -402,7 +408,7 @@ $('#chat-text-div').keypress(e=>{
           $('#chat-text-div').text('');
         }
       });
-
+      
       var checking = false;
       $('#button-chat').on('click', function(e) {
         if (noteContent.length) {
