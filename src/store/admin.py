@@ -1,12 +1,20 @@
 from django.contrib import admin
+from import_export import resources
 from .models.product import Products, Color, CMD
 from .models.category import Category
 from .models.customer import Customer
 from .models.orders import Order
 
 
+class CMDResource(resources.ModelResource):
+    class Meta:
+        model = CMD
+        fields = ('command',)
+
+
 @admin.register(CMD)
-class CMDAdmin(admin.ModelAdmin):
+class CMDAdmin(ImportExportModelAdmin):
+    resource_class = CMDResource
     list_display = ('command', )
 
 @admin.register(Color)
