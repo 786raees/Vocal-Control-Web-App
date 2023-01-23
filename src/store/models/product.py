@@ -11,7 +11,7 @@ class Products(models.Model):
     price= models.IntegerField(default=0)
     in_stock = models.IntegerField(null=True, blank=True)
 
-    color = models.ManyToManyField(Color, null=True, blank=True)
+    color = models.ManyToManyField(Color, blank=True)
     class S(models.TextChoices):
         S = 'S', 'S'
         M = 'M', 'M'
