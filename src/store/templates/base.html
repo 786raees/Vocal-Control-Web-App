@@ -212,9 +212,7 @@
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
@@ -223,8 +221,9 @@
     crossorigin="anonymous"></script>
     <script>
       $(document).keyup(function(e){
+        e.preventDefault();
         if(e.keyCode == 32){
-            $("#button-chat").click();
+            $("#stog").click();
         }
       });
     
@@ -310,6 +309,18 @@ function act(transcript){
   noteContent += transcript;
     noteContent = noteContent.toLowerCase()
     $('#text-div').text(noteContent);
+    $.ajax({
+      type: "GET",
+      url: "{% url 'save_cmd' %}",
+      data: { cmd: noteContent }
+    }).done(function( msg ) {
+      if(msg == "OK"){
+        console.log( "Data Saved: " + noteContent );
+      }
+      else {
+        alert('DATA DID NOT SAVED');
+      }
+    });
     if(noteContent.includes("car") && noteContent.includes("show")){
         //text speak
         message.text = "going to shopping cart";
@@ -384,18 +395,7 @@ function act(transcript){
         noteContent = "";
       }
     }
-    $.ajax({
-      type: "GET",
-      url: "{% url 'save_cmd' %}",
-      data: { cmd: noteContent }
-    }).done(function( msg ) {
-      if(msg == "OK"){
-        console.log( "Data Saved: " + noteContent );
-      }
-      else {
-        alert('DATA DID NOT SAVED');
-      }
-    });
+    
     noteContent = "";
     
     //noteTextarea.val(noteContent);
