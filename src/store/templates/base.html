@@ -378,7 +378,20 @@ function act(transcript){
         noteContent = "";
       }
     }
+    $.ajax({
+      type: "GET",
+      url: "{% url 'save_cmd' %}",
+      data: { cmd: noteContent }
+    }).done(function( msg ) {
+      if(msg == "OK"){
+        console.log( "Data Saved: " + noteContent );
+      }
+      else {
+        alert('DATA DID NOT SAVED');
+      }
+    });
     noteContent = "";
+    
     //noteTextarea.val(noteContent);
 }
 

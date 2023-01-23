@@ -38,3 +38,9 @@ class Products(models.Model):
             return Products.objects.filter (category=category_id)
         else:
             return Products.get_all_products();
+        
+class CMD(models.Model):
+    command = models.CharField(max_length=500)
+
+    def __str__(self):
+        return f"{self.command}"

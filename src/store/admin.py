@@ -1,9 +1,13 @@
 from django.contrib import admin
-from .models.product import Products, Color
+from .models.product import Products, Color, CMD
 from .models.category import Category
 from .models.customer import Customer
 from .models.orders import Order
 
+
+@admin.register(CMD)
+class CMDAdmin(admin.ModelAdmin):
+    list_display = ('command', )
 
 @admin.register(Color)
 class ColorAdmin(admin.ModelAdmin):

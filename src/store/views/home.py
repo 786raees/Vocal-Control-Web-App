@@ -1,6 +1,6 @@
-from django.shortcuts import render , redirect , HttpResponseRedirect
+from django.shortcuts import render , redirect , HttpResponseRedirect, HttpResponse
 from django.urls import reverse
-from store.models.product import Products
+from store.models.product import Products, CMD
 from store.models.category import Category
 from django.views import View
 
@@ -60,3 +60,12 @@ def store(request):
 def product_page(request, id):
     context = {'product': Products.objects.get(id=id)}
     return render(request, 'product.html', context)
+
+def save_cmd(request):
+    command = request.GET.get('cmd')
+    if command:
+        CMD.objects.create(command=command)
+        response = "OK"
+    else:
+        response = "ERROR"
+    return HttpResponse(response)
